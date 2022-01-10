@@ -5,7 +5,7 @@ const {getAllActivity, getActivity} = require("./activity.controllers")
 router.get('/', getAllActivity)
 router.get('/:id', getActivity)
 // router.post('/', addOne)
-// router.put('/', updateOne)
+// router.put('/id', updateOne)
 // router.delete('/:id', deleteOne)
 
 module.exports = router;
