@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router();
 
-const{getAll, addOne, updateOne, deleteOne, getUser} = require('./userActivity.controllers')
+const{getAll, addOne, updateOne, deleteOne, getUser} = require('./userMakanan.controllers')
 
 router.get('/', getAll)
 router.get('/:id', getUser)
