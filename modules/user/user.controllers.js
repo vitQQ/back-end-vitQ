@@ -65,7 +65,7 @@ module.exports = {
       });
     } else {
       res.send({
-        message: "ERROR",
+        message: "ERROR"
       });
     }
   },

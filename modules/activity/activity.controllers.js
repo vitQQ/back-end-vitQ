@@ -14,7 +14,7 @@ module.exports = {
   getActivity: (req, res) => {
     ActivityModel
       .findOne({
-        _id: req.activity.id,
+        _id: req.params.id,
       })
       .then(result => {
         res.send({ message: "SUCCESS", result });
@@ -77,5 +77,3 @@ module.exports = {
 // },
 
 }
-
-

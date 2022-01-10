@@ -6,7 +6,7 @@ const{getAll, addOne, updateOne, deleteOne, getUser} = require('./user.controlle
 router.get('/', getAll)
 router.get('/:id', getUser)
 router.post('/', addOne)
-router.put('/', updateOne)
+router.put('/:id', updateOne)
 router.delete('/:id', deleteOne)
 
 
