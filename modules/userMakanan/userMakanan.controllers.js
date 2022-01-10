@@ -1,12 +1,12 @@
-const UserActivityModel = require("./userActivity.models")
+const UserMakananModel = require("./userMakanan.models")
 
 module.exports = {
     getAll: async (req, res) => {
         try{
-            const usty = await UserActivityModel.find()
+            const usma = await UserMakananModel.find()
             .populate("id_user")
-            .populate("id_activity");
-            res.status(200).send({message: "OK", data: usty});
+            .populate("id_makanan");
+            res.status(200).send({message: "OK", data: usma});
         } catch (error) {
           res.status(500).send(error.message);
         }
@@ -15,36 +15,40 @@ module.exports = {
   
     getUser: async (req, res) => {
       try{
-        const useract = await UserActivityModel.findOne({_id: req.params.id})
+        const usermakanan = await UserMakananModel.findOne({_id: req.params.id})
         .populate("id_user")
-        .populate("id_activity")
-        res.status(200).send({message: "OK", data: useract});
+        .populate("id_makanan")
+        res.status(200).send({message: "OK", data: usermakanan});
       } catch (error) {
         res.status(500).send(error.message);
       }
     },
   
     addOne: (req, res) => {
-        const {id_user, id_activity, date_time, thumbnail_url} = req.body;
-        UserActivityModel.create({
-          id_user,
-          id_activity,
-          date_time,
-          thumbnail_url
-        },
+      const {id_user, id_makanan, date_time, nilai, jumlah_kalori, jumlah_emisi} = req.body;
+      UserMakananModel.create({
+        id_user,
+        id_makanan,
+        date_time,
+        nilai,
+        jumlah_kalori,
+        jumlah_emisi
+      },
         // const id = req.params.id;
         // const body = req.body;
         // const date_time = Date.now()
-        // UserActivityModel.create({
+        // UserMakananModel.create({
         //     id_user : req.UserModel.id,
-        //     id_activity : req.Activity.id,
+        //     id_makanan : req.Makanan.id,
         //     date_time : date_time,
-        //     thumbnail_url : body.thumbnail_url
+        //     nilai : body.nilai,
+        //     jumlah_kalori : body.jumlah_kalori,
+        //     jumlah_emisi : body.jumlah_emisi,
         // },
         (error, result) => {
             if(error) {
                 res.status(400).send({
-                    message: "GAGAL MENAMBAHKAN",
+                    message: "ERROR",
                 })
             } else {
                 res.status(200).send({
@@ -54,33 +58,32 @@ module.exports = {
             }
         })
     },
- 
   
     updateOne: async (req, res) => {
-      const {thumbnail_url } = req.body;
-      const useAct = await UserActivityModel.updateOne(
+      const {nilai, jumlah_kalori, jumlah_emisi} = req.body;
+      const usrMakanan = await UserMakananModel.updateOne(
         { _id: req.params.id },
-        { thumbnail_url },
+        {nilai, jumlah_kalori, jumlah_emisi},
         { new: true }
       );
-      if (useAct) {
+      if (usrMakanan) {
         res.send({
           message: "SUCCESS",
-          useAct,
+          usrMakanan,
         });
       } else {
         res.send({
-          message: "ERROR",
+          message: "ERROR"
         });
       }
     },
   
     deleteOne: async (req, res) => {
-      const useAct = await UserActivityModel.deleteOne({ _id: req.params.id }, { new: true });
-      if (useAct) {
+      const usrMakanan = await UserMakananModel.deleteOne({ _id: req.params.id }, { new: true });
+      if (usrMakanan) {
         res.send({
           message: "SUCCESS",
-          UserActivityModel,
+          UserMakananModel,
         });
       } else {
         res.send({ message: "ERROR" });
