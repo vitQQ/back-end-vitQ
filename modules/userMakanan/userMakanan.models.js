@@ -7,26 +7,26 @@ const opt = {
 
 const userMakananSchema = new mongoose.Schema(
   {
-    id_user: [{
+    id_user: {
         type: mongoose.Schema.Types.ObjectId,
         ref : "User",
-    }],
+    },
     id_makanan: [{
         type: mongoose.Schema.Types.ObjectId,
         ref : "Makanan",
     }],
     date_time: {
-        type: Date,
-        default: Date.now
+        type: String,
+        default: new Date()
     },
     nilai: {
         type : Number,
     },
     jumlah_kalori: {
-        Number,
+        type: Number,
     },
     jumlah_emisi: {
-        type: String,
+        type: Number,
     },
 
   },
