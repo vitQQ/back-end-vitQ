@@ -16,6 +16,7 @@ class LoginController {
           process.env.TOKEN_SECRET,
           { expiresIn: "1h" }
         );
+        console.log(accessToken)
         res.json({
           accessToken,
         });
