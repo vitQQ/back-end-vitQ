@@ -12,7 +12,6 @@ class LoginController {
 
       console.log(isUser)
 
-
       if (isUser) {
 <<<<<<< HEAD
         const cmp = helper.compare(body.password, isUser.password)
