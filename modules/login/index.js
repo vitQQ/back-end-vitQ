@@ -28,8 +28,7 @@ class LoginController {
         else {
           res.status(401).send("password incorrect")
         }
-        
-      } else {
+     } else {
         res.status(401).send("Username or password incorrect");
       }
     } catch (error) {
