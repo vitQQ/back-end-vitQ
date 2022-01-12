@@ -1,9 +1,10 @@
 const express = require('express')
 const router = express.Router();
+const authenticateJWT = require('../../helpers')
 
 const{getAll, addOne, updateOne, deleteOne, getUser} = require('./user.controllers')
 
-router.get('/', getAll)
+router.get('/', authenticateJWT ,getAll)
 router.get('/:id', getUser)
 router.post('/', addOne)
 router.put('/:id', updateOne)

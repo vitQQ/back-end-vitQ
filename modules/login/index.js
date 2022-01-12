@@ -26,10 +26,10 @@ class LoginController {
           });
         }
         else {
-          res.send("password incorrect")
+          res.status(401).send("password incorrect")
         }
      } else {
-        res.send("Username or password incorrect");
+        res.status(401).send("Username or password incorrect");
       }
     } catch (error) {
       res.status(500).send({ error: error.message });
