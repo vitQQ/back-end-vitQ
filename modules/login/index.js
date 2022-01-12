@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
-const UserModel = require("../user/user.models");
+const UserModel = require("../models/user.model");
+const helper = require("./bcrypt")
 
 class LoginController {
   static async loginUser(req, res) {
@@ -7,18 +8,28 @@ class LoginController {
       const body = req.body;
       const isUser = await UserModel.findOne({
         email: body.email,
-        password: body.password,
       });
+
       console.log(isUser)
+
+
       if (isUser) {
-        const accessToken = jwt.sign(
-          { id: isUser.id, email: isUser.email },
-          process.env.TOKEN_SECRET,
-          { expiresIn: "1h" }
-        );
-        res.json({
-          accessToken,
-        });
+        const cmp = helper.compare(body.password, isUser.password)
+
+        if(cmp){
+          const accessToken = jwt.sign(
+            { id: isUser.id, email: isUser.email },
+            process.env.TOKEN_SECRET,
+            { expiresIn: "1h" }
+          );
+          res.json({
+            accessToken,
+          });
+        }
+        else {
+          res.send("password incorrect")
+        }
+        
       } else {
         res.send("Username or password incorrect");
       }
