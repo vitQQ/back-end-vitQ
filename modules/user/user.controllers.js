@@ -1,4 +1,5 @@
 const UserModel = require("./user.models");
+const helper = require("../login/bcrypt");
 
 module.exports = {
   getAll: async (req, res) => {
@@ -31,46 +32,31 @@ module.exports = {
       .catch((error) => res.send(error));
   },
 
-  addOne: (req, res) => {
-    const {
-      nama,
-      email,
-      password,
-      jenisKelamin,
-      umur,
-      berat_badan,
-      tinggi_badan,
-      activity_level,
-      kaloriHarian,
-    } = req.body;
-    // if(nama === null && email === null && password === null && nik === null && email === null && phoneNumber === null && wa === null && password === null ) {
-    //     res.status(400).json({message : "Data tidak boleh kosong"})
-    // }else{
-    UserModel.create(
-      {
-        nama,
-        email,
-        password,
-        jenisKelamin,
-        umur,
-        berat_badan,
-        tinggi_badan,
-        activity_level,
-        kaloriHarian,
-      },
-      (error, result) => {
-        if (error) {
-          res.status(400).json({
-            message: "error",
-          });
-        } else {
-          res.status(200).json({
-            message: "success",
-            result,
-          });
-        }
+  addOne: async (req, res) => {
+    try {
+      const body = req.body;
+      const newUser = new UserModel({
+        nama: body.nama,
+        email: body.email,
+        password: helper.hash(body.password),
+        jenisKelamin: body.jenisKelamin,
+        umur: body.umur,
+        berat_badan: body.berat_badan,
+        tinggi_badan: body.tinggi_badan,
+        activity_level: body.activity_level,
+        kaloriHarian: body.kaloriHarian,
+      });
+      const exist = await UserModel.findOne({ email: newUser.email });
+      console.log(exist)
+      if (exist) {
+        res.status(403).send("Email Already Exist");
+      } else {
+        const saved = await newUser.save();
+        res.status(201).send("Account Created");
       }
-    );
+    } catch (error) {
+      res.status(500).send(error.message);
+    }
   },
 
   updateOne: async (req, res) => {
