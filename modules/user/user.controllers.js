@@ -104,4 +104,32 @@ module.exports = {
       res.send({ message: "ERROR" });
     }
   },
+
+  loginByGoogle : async(req,res) => {
+    try {
+      const profile = req.body.profileObj;
+
+      UserModel.create({
+        nama : profile.name,
+        email: profile.email
+      })
+        .then(result => {
+          console.log(result);
+          res.status(200).send({
+            message:'success',
+            result,
+          })
+        })
+        .catch (error => {
+          console.log(error);
+          res.status(500).send({
+            message:'error',
+            error, 
+          })
+        })
+    } catch (e) {
+      console.log(error);
+      res.status(401).send();
+    }
+  },
 };
