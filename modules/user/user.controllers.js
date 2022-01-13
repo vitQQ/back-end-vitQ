@@ -1,5 +1,6 @@
 const UserModel = require("./user.models");
 const helper = require("../login/bcrypt");
+const kalori = require("../../helpers/kalori");
 
 module.exports = {
   getAll: async (req, res) => {
@@ -60,41 +61,32 @@ module.exports = {
   },
 
   updateOne: async (req, res) => {
-    const {
-      nama,
-      email,
-      password,
-      jenisKelamin,
-      umur,
-      berat_badan,
-      tinggi_badan,
-      activity_level,
-      kaloriHarian,
-    } = req.body;
-    const users = await UserModel.updateOne(
-      { _id: req.params.id },
-      {
-        nama,
-        email,
-        password,
-        jenisKelamin,
-        umur,
-        berat_badan,
-        tinggi_badan,
-        activity_level,
-        kaloriHarian,
-      },
-      { new: true }
-    );
-    if (users) {
-      res.send({
-        message: "SUCCESS",
-        users, //atau user!!!!!!!!!!!!!!!!
-      });
-    } else {
-      res.send({
-        message: "ERROR",
-      });
+    try {
+      const body = req.body;
+      const users = await UserModel.updateOne({_id: req.user.id},
+        {
+          nama : body.nama,
+          email: body.email,
+          password: helper.hash(body.password),
+          jenisKelamin: body.jenisKelamin,
+          umur: body.umur,
+          berat_badan: body.berat_badan,
+          tinggi_badan: body.tinggi_badan,
+          activity_level: body.activity_level,
+          kaloriHarian: kalori(sex, height, weight, age, actLevel),
+        })
+        if (users) {
+          res.send({
+            message: "SUCCESS",
+            users, //atau user!!!!!!!!!!!!!!!!
+          });
+        } else {
+          res.send({
+            message: "ERROR",
+          });
+        }
+    } catch (error) {
+      res.status(500).send(error.message);
     }
   },
 

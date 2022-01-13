@@ -18,9 +18,6 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true
     },
-    umur: {
-        type: String,
-    },
     jenisKelamin: {
       type: String,
       enum: ['L','P']
