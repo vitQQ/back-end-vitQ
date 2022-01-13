@@ -23,7 +23,7 @@ module.exports = {
   },
 
 addOne: (req, res) => {
-  const{namaMakanan, unit, nilai, kalori, emisi, protein, carbon, fat} = req.body;
+  const{namaMakanan, unit, nilai, kalori, emisi, protein, carbon, fat, url_image} = req.body;
   MakananModel.create({
       namaMakanan,
       unit, 
@@ -32,7 +32,8 @@ addOne: (req, res) => {
       emisi, 
       protein, 
       carbon, 
-      fat          
+      fat,
+      url_image          
   }, (error, result) => {
       if(error) {
           res.status(400).json({
@@ -47,10 +48,10 @@ addOne: (req, res) => {
 },
 
 updateOne: async (req, res) => {
-  const {namaMakanan, unit, nilai, kalori, emisi, protein, carbon, fat} = req.body;
+  const {namaMakanan, unit, nilai, kalori, emisi, protein, carbon, fat, url_image} = req.body;
   const makanan = await MakananModel.updateOne(
     { _id: req.params.id },
-    { namaMakanan, unit, nilai, kalori, emisi, protein, carbon, fat },
+    { namaMakanan, unit, nilai, kalori, emisi, protein, carbon, fat, url_image },
     { new: true }
   );
   if (makanan) {

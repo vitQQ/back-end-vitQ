@@ -30,7 +30,10 @@ const makananSchema = new mongoose.Schema(
     },
     fat: {
         type: Number,
-    }
+    },
+    url_image: {
+      type: String,
+    },
 
   },
   opt
