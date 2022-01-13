@@ -6,6 +6,7 @@ const userMakanan = require("../modules/userMakanan/userMakanan.routes")
 
 const LoginController = require("../modules/login")
 const RegisterController = require("../modules/user/user.controllers")
+const loginByGoogleController = require("../modules/user/user.controllers")
 
 const rootRouterMd = [
   {
@@ -45,6 +46,11 @@ const rootRouterPost = [
         method: "post",
         path: "/register",
         handler: RegisterController.addOne
+    },
+    {
+        method : "post",
+        path: "/auth/google",
+        handler: loginByGoogleController.loginByGoogle
     }
 ]
 
