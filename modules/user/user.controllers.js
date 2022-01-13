@@ -67,13 +67,13 @@ module.exports = {
         {
           nama : body.nama,
           email: body.email,
-          password: helper.hash(body.password),
           jenisKelamin: body.jenisKelamin,
+          // password: helper.hash(body.password)
           umur: body.umur,
           berat_badan: body.berat_badan,
           tinggi_badan: body.tinggi_badan,
           activity_level: body.activity_level,
-          kaloriHarian: kalori(sex, height, weight, age, actLevel),
+          kaloriHarian: kalori(body.jenisKelamin, body.tinggi_badan, body.berat_badan, body.umur, body.activity_level),
         })
         if (users) {
           res.send({
