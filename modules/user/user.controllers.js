@@ -1,4 +1,5 @@
 const UserModel = require("./user.models");
+const jwt = require("jsonwebtoken");
 const helper = require("../login/bcrypt");
 const kalori = require("../../helpers/kalori");
 
@@ -48,12 +49,17 @@ module.exports = {
         kaloriHarian: body.kaloriHarian,
       });
       const exist = await UserModel.findOne({ email: newUser.email });
-      console.log(exist)
+      console.log(exist);
       if (exist) {
         res.status(403).send("Email Already Exist");
       } else {
         const saved = await newUser.save();
-        res.status(201).send("Account Created");
+
+        const accessToken = jwt.sign(
+          { id: saved.id, email: saved.email },
+          process.env.TOKEN_SECRET
+        );
+        res.status(201).send({ message: "Account Created", accessToken });
       }
     } catch (error) {
       res.status(500).send(error.message);
@@ -63,9 +69,10 @@ module.exports = {
   updateOne: async (req, res) => {
     try {
       const body = req.body;
-      const users = await UserModel.updateOne({_id: req.user.id},
+      const users = await UserModel.updateOne(
+        { _id: req.user.id },
         {
-          nama : body.nama,
+          nama: body.nama,
           email: body.email,
           jenisKelamin: body.jenisKelamin,
           // password: helper.hash(body.password)
@@ -73,18 +80,25 @@ module.exports = {
           berat_badan: body.berat_badan,
           tinggi_badan: body.tinggi_badan,
           activity_level: body.activity_level,
-          kaloriHarian: kalori(body.jenisKelamin, body.tinggi_badan, body.berat_badan, body.umur, body.activity_level),
-        })
-        if (users) {
-          res.send({
-            message: "SUCCESS",
-            users, //atau user!!!!!!!!!!!!!!!!
-          });
-        } else {
-          res.send({
-            message: "ERROR",
-          });
+          kaloriHarian: kalori(
+            body.jenisKelamin,
+            body.tinggi_badan,
+            body.berat_badan,
+            body.umur,
+            body.activity_level
+          ),
         }
+      );
+      if (users) {
+        res.send({
+          message: "SUCCESS",
+          users, //atau user!!!!!!!!!!!!!!!!
+        });
+      } else {
+        res.send({
+          message: "ERROR",
+        });
+      }
     } catch (error) {
       res.status(500).send(error.message);
     }
@@ -105,28 +119,28 @@ module.exports = {
     }
   },
 
-  loginByGoogle : async(req,res) => {
+  loginByGoogle: async (req, res) => {
     try {
       const profile = req.body.profileObj;
 
       UserModel.create({
-        nama : profile.name,
-        email: profile.email
+        nama: profile.name,
+        email: profile.email,
       })
-        .then(result => {
+        .then((result) => {
           console.log(result);
           res.status(200).send({
-            message:'success',
+            message: "success",
             result,
-          })
+          });
         })
-        .catch (error => {
+        .catch((error) => {
           console.log(error);
           res.status(500).send({
-            message:'error',
-            error, 
-          })
-        })
+            message: "error",
+            error,
+          });
+        });
     } catch (e) {
       console.log(error);
       res.status(401).send();
